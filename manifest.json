@@ -1,0 +1,14 @@
+{
+  "name": "YouTube Transcript",
+  "version": "1.0",
+  "description": "Displays YouTube video transcripts.",
+  "manifest_version": 2,
+  "content_scripts": [{
+    "js": ["contentScript.js"],
+    "matches": ["*://www.youtube.com/*"],
+    "run_at": "document_start"
+  }],
+  "permissions": [
+    "activeTab"
+  ]
+}
