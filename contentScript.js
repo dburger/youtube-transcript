@@ -22,9 +22,20 @@ function interceptData() {
     XHR.send = function() {
         this.addEventListener("load", function() {
             if (this.url.includes("timedtext")) {
+                function format(number) {
+                   return ("0" + number).slice(-2);
+                }
                 var content = [];
                 JSON.parse(this.response).events.forEach(e => {
-                  (e.segs || []).forEach(s => {
+                  var segments = e.segs || [];
+                  var newline = segments.length === 1 && segments[0].utf8 === "\\n";
+                  if (!newline) {
+                    var startSecs = Math.floor(e.tStartMs / 1000);
+                    var startMins = Math.floor(startSecs / 60);
+                    startSecs = startSecs % 60;
+                    content.push(format(startMins) + ":" + format(startSecs));
+                  }
+                  segments.forEach(s => {
                     if (s.utf8) content.push(s.utf8);
                   });
                 });
